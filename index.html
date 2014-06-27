@@ -1,7 +1,428 @@
 <!DOCTYPE html>
-<html>
-<body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
-</body>
-</html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="keywords" content="lolrandom, lol, league, of, legends, random, team , composition, generator">
+    <meta name="description" content="Generates random team compositions for League of Legends.">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+
+    <title>LoL Random</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <style>
+     body {
+        padding-top: 10px;
+     }
+     .starter-template {
+        padding: 40px 15px;
+        text-align: center;
+     }
+	 
+	 .bump{
+		margin-bottom:10px;
+	 }
+    </style>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+	<p style="color:#FFFFFF">Generates random League of Legends team compositions.</p>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">LoL Randomizer</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="#">Home</a></li>
+            <li id="about"><a href="#about">About</a></li>
+            <li id="contact"><a href="#contact">Contact</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+
+      <section class="starter-template">
+        <h1 class="page-header">Random Team Generator</h1>
+			<div id="names" class="col-md-12">
+			   <input class="bump form-control" id="s1" placeholder="Summoner 1">
+			   <input class="bump form-control" id="s2" placeholder="Summoner 2">
+			   <input class="bump form-control" id="s3" placeholder="Summoner 3">
+			   <input class="bump form-control" id="s4" placeholder="Summoner 4">
+			   <input class="bump form-control" id="s5" placeholder="Summoner 5">
+			</div>
+	<div class="col-md-12">
+	<button style="display: block; width: 100%;" id = "submitbutton" class="bump btn btn-default btn-lg">Generate a Random Team</button>
+    <button style="width: 49%;" style="left: 20px;" id = "submitbutton2" class="btn btn-default btn-lg">Change Names</button>
+	<button style="width: 49%;" style="right: 20px;" id = "submitbutton3" class="btn btn-default btn-lg">Toggle Generated Teams</button>
+		
+	<hr>
+	</div>
+        <table id="ChampionList"class="table table-striped table-bordered table-condensed">
+            <thead>
+            <th>Icon</th>
+            <th>Champion</th>
+			<th>Player</th>
+			<th>Role</th>
+            </thead>
+            <tbody id="champs">
+            </tbody>
+        </table>
+		<section id="listOfChamps">
+			<table id="copypaste" class="table table-striped table-bordered table-condensed">
+				<tbody>
+				</tbody>
+			</table>
+		</section>
+      </section>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script>
+        $(function(){
+			$('#ChampionList').hide();
+			$('#listOfChamps').hide();
+			$('#submitbutton2').hide();
+			$('#submitbutton3').hide();
+			$('#about').hide();
+			$('#contact').hide();
+            var numChamps = 0;
+			var numTeams = 1;
+            var champIDs = [];
+            var team = [];
+			var typeBasedTeam = [];
+                $.ajax({
+                   url: "https://na.api.pvp.net/api/lol/static-data/na/v1.2/champion?champData=image,tags&api_key=5e0d7f9f-eab1-44cd-a0a4-c4aae0195a09",
+                   crossDomain: true,
+                   dataType: "json",
+                   success: function (data) {
+                      for(champions in data.data){
+                           champIDs[numChamps] = data['data'][champions];
+                           numChamps = numChamps + 1;
+                      }
+					  
+					  for(var i = 0; i < 5; i++){
+						var marksCount = [];
+						var num = Math.floor((Math.random() * numChamps));
+						var check = false;
+						typeBasedTeam[i] = champIDs[num]
+						for(var j = 0; j <= i; j++){
+							if(_.isEqual(typeBasedTeam[i], typeBasedTeam[j]) && i != j && ((typeBasedTeam[i]['tags'][0] == typeBasedTeam[j]['tags'][0]) && !(typeBasedTeam[i]['tags'][0] == "Fighter" && typeBasedTeam[j]['tags'][0] == "Fighter") && !(typeBasedTeam[i]['tags'][0] == "Assassin" && typeBasedTeam[j]['tags'][0] == "Assassin"))){
+								i = 0;
+								break;
+							}
+							
+							if(typeBasedTeam[j]['tags'][0] == 'Support'){
+								check = true;
+							}
+							
+							if(typeBasedTeam[j]['tags'][0] == 'Fighter'){
+								marksCount[j] = true;
+							}
+						}
+						
+						if(i == 4){
+						var test = false;
+							for(var j = 0; j < 5; j++){
+								if(typeBasedTeam[j]['tags'][0] == "Marksman"){
+									test = true;
+								}
+							}
+							if(!test){
+								i = 0;
+							}
+						}
+						
+						
+						if(!check){
+							i = 0;
+						}
+					  }
+					  
+					  var types = [];
+					  var marksman = false;
+					  var top = false;
+					  var mid = false;
+					  var jungle = false;
+					  var support = false;
+					  
+					  for(var i = 0; i < 5; i++){
+						if(typeBasedTeam[i]['tags'][0] == "Marksman" && !marksman){
+							types[i] = "Marksman";
+							marksman = true;
+						}
+						
+						else if((typeBasedTeam[i]['tags'][0] == "Fighter" || typeBasedTeam[i]['tags'][0] == "Assassin" || typeBasedTeam[i]['tags'][0] == "Tank") && !top){
+							types[i] = "Top";
+							top = true;
+						}
+						
+						else if((typeBasedTeam[i]['tags'][0] == "Mage" || typeBasedTeam[i]['tags'][0] == "Assassin") && !mid){
+							types[i] = "Mid";
+							mid = true;
+						}
+						
+						else if((typeBasedTeam[i]['tags'][0] == "Fighter" || typeBasedTeam[i]['tags'][0] == "Assassin" || typeBasedTeam[i]['tags'][0] == "Tank") && !jungle){
+							types[i] = "Jungle";
+							jungle = true;
+						}
+						
+						else if((typeBasedTeam[i]['tags'][0] == "Support" || typeBasedTeam[i]['tags'][0] == "Mage") && !support){
+							types[i] = "Support";
+							support = true;
+						}
+						
+						else if(typeBasedTeam[i]['tags'][1] == "Marksman" && !marksman){
+							types[i] = "Marksman";
+							marksman = true;
+						}
+						
+						else if((typeBasedTeam[i]['tags'][1] == "Fighter" || typeBasedTeam[i]['tags'][1] == "Assassin" || typeBasedTeam[i]['tags'][1] == "Tank") && !top){
+							types[i] = "Top";
+							top = true;
+						}
+						
+						else if((typeBasedTeam[i]['tags'][1] == "Mage" || typeBasedTeam[i]['tags'][1] == "Assassin") && !mid){
+							types[i] = "Mid";
+							mid = true;
+						}
+						
+						else if((typeBasedTeam[i]['tags'][1] == "Fighter" || typeBasedTeam[i]['tags'][1] == "Assassin" || typeBasedTeam[i]['tags'][1] == "Tank") && !jungle){
+							types[i] = "Jungle";
+							jungle = true;
+						}
+						
+						else if((typeBasedTeam[i]['tags'][1] == "Support" || typeBasedTeam[i]['tags'][1] == "Mage") && !support){
+							types[i] = "Support";
+							support = true;
+						}
+						
+						else if(!mid){
+								types[i] = "Mid";
+								mid = true;
+						}
+							
+						else if(!marksman){
+								types[i] = "Marksman";
+								marksman = true;
+						}
+							
+						else if(!top){
+								types[i] = "Top";
+								top = true;
+						}
+							
+						else if(!jungle){
+								types[i] = "Jungle";
+								jungle = true;
+						}
+							
+						else if(!support){
+								types[i] = "Support";
+								support = true;
+						}
+							
+					  }
+
+                      for(var i = 0; i < 5; i++){
+                          var num = Math.floor((Math.random() * numChamps));
+                          team[i] = champIDs[num];
+						  for(var j = 0; j <= i; j++){
+							if(_.isEqual(team[i], team[j]) && i != j){
+								i = 0;
+								break;
+							}
+						  }
+                      }		  
+                   }
+                });
+				
+			$('#submitbutton2').click(function(){
+				$('#names').slideToggle();
+				$('#roles').slideToggle();
+			});
+			
+			$('#submitbutton3').click(function(){
+				$('#listOfChamps').slideToggle();
+			});
+			
+            $('#submitbutton').click(function(){
+			$('#ChampionList').show();
+			      for(var i = 0; i < 5; i++){
+						var marksCount = [];
+						var num = Math.floor((Math.random() * numChamps));
+						var check = false;
+						typeBasedTeam[i] = champIDs[num]
+						for(var j = 0; j <= i; j++){
+							if(_.isEqual(typeBasedTeam[i], typeBasedTeam[j]) && i != j && ((typeBasedTeam[i]['tags'][0] == typeBasedTeam[j]['tags'][0]) && !(typeBasedTeam[i]['tags'][0] == "Fighter" && typeBasedTeam[j]['tags'][0] == "Fighter") && !(typeBasedTeam[i]['tags'][0] == "Assassin" && typeBasedTeam[j]['tags'][0] == "Assassin"))){
+								i = 0;
+								break;
+							}
+							
+							if(typeBasedTeam[j]['tags'][0] == 'Support'){
+								check = true;
+							}
+							
+							if(typeBasedTeam[j]['tags'][0] == 'Fighter'){
+								marksCount[j] = true;
+							}
+						}
+						
+						if(i == 4){
+						var test = false;
+							for(var j = 0; j < 5; j++){
+								if(typeBasedTeam[j]['tags'][0] == "Marksman"){
+									test = true;
+								}
+							}
+							if(!test){
+								i = 0;
+							}
+						}
+						
+						
+						if(!check){
+							i = 0;
+						}
+						
+						
+					  }  
+					  
+					  var types = [];
+					  var marksman = false;
+					  var top = false;
+					  var mid = false;
+					  var jungle = false;
+					  var support = false;
+					  
+					  for(var i = 0; i < 5; i++){
+						if(typeBasedTeam[i]['tags'][0] == "Marksman" && !marksman){
+							types[i] = "Marksman";
+							marksman = true;
+						}
+						
+						else if((typeBasedTeam[i]['tags'][0] == "Fighter" || typeBasedTeam[i]['tags'][0] == "Assassin" || typeBasedTeam[i]['tags'][0] == "Tank") && !top){
+							types[i] = "Top";
+							top = true;
+						}
+						
+						else if((typeBasedTeam[i]['tags'][0] == "Mage" || typeBasedTeam[i]['tags'][0] == "Assassin") && !mid){
+							types[i] = "Mid";
+							mid = true;
+						}
+						
+						else if((typeBasedTeam[i]['tags'][0] == "Fighter" || typeBasedTeam[i]['tags'][0] == "Assassin" || typeBasedTeam[i]['tags'][0] == "Tank") && !jungle){
+							types[i] = "Jungle";
+							jungle = true;
+						}
+						
+						else if((typeBasedTeam[i]['tags'][0] == "Support" || typeBasedTeam[i]['tags'][0] == "Mage") && !support){
+							types[i] = "Support";
+							support = true;
+						}
+						
+						else if(typeBasedTeam[i]['tags'][1] == "Marksman" && !marksman){
+							types[i] = "Marksman";
+							marksman = true;
+						}
+						
+						else if((typeBasedTeam[i]['tags'][1] == "Fighter" || typeBasedTeam[i]['tags'][1] == "Assassin" || typeBasedTeam[i]['tags'][1] == "Tank") && !top){
+							types[i] = "Top";
+							top = true;
+						}
+						
+						else if((typeBasedTeam[i]['tags'][1] == "Mage" || typeBasedTeam[i]['tags'][1] == "Assassin") && !mid){
+							types[i] = "Mid";
+							mid = true;
+						}
+						
+						else if((typeBasedTeam[i]['tags'][1] == "Fighter" || typeBasedTeam[i]['tags'][1] == "Assassin" || typeBasedTeam[i]['tags'][1] == "Tank") && !jungle){
+							types[i] = "Jungle";
+							jungle = true;
+						}
+						
+						else if((typeBasedTeam[i]['tags'][1] == "Support" || typeBasedTeam[i]['tags'][1] == "Mage") && !support){
+							types[i] = "Support";
+							support = true;
+						}
+						
+						else if(!mid){
+								types[i] = "Mid";
+								mid = true;
+						}
+							
+						else if(!marksman){
+								types[i] = "Marksman";
+								marksman = true;
+						}
+							
+						else if(!top){
+								types[i] = "Top";
+								top = true;
+						}
+							
+						else if(!jungle){
+								types[i] = "Jungle";
+								jungle = true;
+						}
+							
+						else if(!support){
+								types[i] = "Support";
+								support = true;
+						}
+							
+						
+					  }
+	  
+                 $('#champs').html("");
+				 $('#copypaste').append('<tr><td></td><td>' + "<b>Team " + numTeams + '</b></td><td></td></tr>');
+				 numTeams++;
+                 for(var i = 0; i < 5; i++){
+					if($('#s' + (i+1)).val() != ""){
+						$('#champs').append('<tr><td><img style="margin-right:2em;" src="http://ddragon.leagueoflegends.com/cdn/4.10.7/img/champion/' + typeBasedTeam[i].image.full + '" height="120" width="120"></td>' + '<td>' + typeBasedTeam[i].name + ', ' + typeBasedTeam[i].title + '</td>' + '<td>' + $('#s' + (i+1)).val() + '</td>' + '<td>' + types[i] + '</td></tr>');
+						$('#copypaste').append('<tr><td>' + typeBasedTeam[i].name + '\t</td>' + '<td>' + $('#s' + (i+1)).val() + '</td>' + '\t<td>' + types[i] + '</td></tr>');
+					}
+					else{
+						$('#champs').append('<tr><td><img style="margin-right:2em;" src="http://ddragon.leagueoflegends.com/cdn/4.10.7/img/champion/' + typeBasedTeam[i].image.full + '" height="120" width="120"></td>' + '<td>' + typeBasedTeam[i].name + ', ' + typeBasedTeam[i].title + '</td>' + '<td> Summoner ' + (i+1) + '<td>' + types[i] + '</td></tr>');
+						$('#copypaste').append('<tr><td>' + typeBasedTeam[i].name + '\t</td>' + '<td> Summoner ' + (i+1) + '\t<td>' + types[i] + '</td></tr>');
+					}
+                }
+				$('#submitbutton2').show();
+				$('#submitbutton3').show();
+				$('#names').slideUp();
+				$('#roles').slideUp();
+            });
+        });
+    </script>
+
+  </body>
+</html>				
