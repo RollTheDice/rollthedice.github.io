@@ -46,6 +46,34 @@
 	  background-color: #7D26CD;
 	  border-color: #7D26CD;
 	}
+	
+	.btn-custom2 {
+	  background-color: #ffce30;
+	  border-color: #ffce30;
+	}
+	.btn-custom2:hover,
+	.btn-custom2:focus,
+	.btn-custom2:active,
+	.btn-custom2.active {
+	  background-color: #ffc817;
+	  border-color: #fcc000;
+	}
+	.btn-custom2.disabled:hover,
+	.btn-custom2.disabled:focus,
+	.btn-custom2.disabled:active,
+	.btn-custom2.disabled.active,
+	.btn-custom2[disabled]:hover,
+	.btn-custom2[disabled]:focus,
+	.btn-custom2[disabled]:active,
+	.btn-custom2[disabled].active,
+	fieldset[disabled] .btn-custom2:hover,
+	fieldset[disabled] .btn-custom2:focus,
+	fieldset[disabled] .btn-custom2:active,
+	fieldset[disabled] .btn-custom2.active {
+	  background-color: #ffce30;
+	  border-color: #ffce30;
+	}
+
 
      body {
         padding-top: 10px;
@@ -107,13 +135,13 @@
 			</div>
 	<div class="btn-group btn-group-lg btn-group-justified">
 	 <div class="btn-group">
-		<button id = "submitbutton2" class="btn btn-danger btn-lg">Change Names</button>
+		<button id = "submitbutton2" class="btn btn-custom2 btn-lg">Change Names</button>
 	 </div>
 	 <div class="btn-group">
-		<button id = "submitbutton" class="btn btn-custom btn-lg">Generate a Random Team</button>
+		<button id = "submitbutton" style="color:#FFF" class="btn btn-custom btn-lg">Generate a Random Team</button>
 	 </div>
 	 <div class="btn-group">
-		<button id = "submitbutton3" class="btn btn-danger btn-lg">Toggle Generated Teams</button>
+		<button id = "submitbutton3" class="btn btn-custom2 btn-lg">Toggle Generated Teams</button>
 	  </div>
 	</div>
 		
