@@ -20,6 +20,33 @@
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
     <style>
+	.btn-custom {
+	  background-color: #7D26CD;
+	  border-color: #7D26CD;
+	}
+	.btn-custom:hover,
+	.btn-custom:focus,
+	.btn-custom:active,
+	.btn-custom.active {
+	  background-color: #7022b7;
+	  border-color: #631ea2;
+	}
+	.btn-custom.disabled:hover,
+	.btn-custom.disabled:focus,
+	.btn-custom.disabled:active,
+	.btn-custom.disabled.active,
+	.btn-custom[disabled]:hover,
+	.btn-custom[disabled]:focus,
+	.btn-custom[disabled]:active,
+	.btn-custom[disabled].active,
+	fieldset[disabled] .btn-custom:hover,
+	fieldset[disabled] .btn-custom:focus,
+	fieldset[disabled] .btn-custom:active,
+	fieldset[disabled] .btn-custom.active {
+	  background-color: #7D26CD;
+	  border-color: #7D26CD;
+	}
+
      body {
         padding-top: 10px;
 		background: #c2b3ff;
@@ -83,7 +110,7 @@
 		<button id = "submitbutton2" class="btn btn-danger btn-lg">Change Names</button>
 	 </div>
 	 <div class="btn-group">
-		<button id = "submitbutton" class="btn btn-danger btn-lg">Generate a Random Team</button>
+		<button id = "submitbutton" class="btn btn-custom btn-lg">Generate a Random Team</button>
 	 </div>
 	 <div class="btn-group">
 		<button id = "submitbutton3" class="btn btn-danger btn-lg">Toggle Generated Teams</button>
